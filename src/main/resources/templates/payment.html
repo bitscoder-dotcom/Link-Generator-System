@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        form input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 20%;
+        }
+        form input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+        form input[type="text"], form input[type="submit"] {
+            width: 50%;
+            padding: 12px 20px;
+            margin: 8px 0;
+
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+<div >
+
+    <h1>Invoice Details</h1>
+
+    <p><strong>Invoice ID:</strong> <span th:text="${invoice.id}"></span></p>
+    <p><strong>Customer Name:</strong> <span th:text="${invoice.customerName}"></span></p>
+    <p><strong>Customer Email:</strong> <span th:text="${invoice.customerEmail}"></span></p>
+    <p><strong>Description:</strong> <span th:text="${invoice.description}"></span></p>
+    <p><strong>Quantity:</strong> <span th:text="${invoice.quantity}"></span></p>
+    <p><strong>Unit Price:</strong> <span th:text="${invoice.unitPrice}"></span></p>
+    <p><strong>Total Amount:</strong> <span th:text="${invoice.totalAmount}"></span></p>
+
+    <form action="#" th:action="@{/payment}" method="post">
+        <input type="text" placeholder="Enter Link ID" name="linkId" required>
+        <input type="text" placeholder="Enter Invoice ID" name="invoiceId" required>
+        <input type="submit" value="Pay">
+    </form>
+
+</div>
+
+</body>
+</html>

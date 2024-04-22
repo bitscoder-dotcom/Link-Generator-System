@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .receipt {
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .receipt h1 {
+            color: #333;
+            font-size: 24px;
+        }
+        .receipt p {
+            line-height: 1.6;
+            color: #666;
+        }
+        .receipt p strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div class="receipt">
+    <h1>Payment Receipt</h1>
+    <p><strong>Invoice ID:</strong> <span th:text="${invoice.id}"></span></p>
+    <p><strong>Customer Name:</strong> <span th:text="${invoice.customerName}"></span></p>
+    <p><strong>Description:</strong> <span th:text="${invoice.description}"></span></p>
+    <p><strong>Quantity:</strong> <span th:text="${invoice.quantity}"></span></p>
+    <p><strong>Unit Price:</strong> <span th:text="${invoice.unitPrice}"></span></p>
+    <p><strong>Total Amount:</strong> <span th:text="${invoice.totalAmount}"></span></p>
+    <p><strong>Payment Date:</strong> <span th:text="${paymentDate}"></span></p>
+</div>
+</body>
+</html>

@@ -29,6 +29,7 @@ public class Invoice {
     private double totalAmount;
     private Date invoiceGenerationDate;
     private Date paymentDueDate;
+    @Enumerated(EnumType.STRING)
     private Status status;
     @OneToOne(mappedBy = "invoice", cascade = CascadeType.ALL)
     private PaymentLink paymentLink;

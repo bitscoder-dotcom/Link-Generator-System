@@ -85,6 +85,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/lgsApp/v1/auth/**").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/lgsApp/v1/invoice/{invoiceId}/payment", "/payment").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin();
