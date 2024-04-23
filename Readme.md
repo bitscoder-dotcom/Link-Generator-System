@@ -66,23 +66,16 @@ For API documentation, refer to the Postman documentation:
 [Link to API Documentation](https://documenter.getpostman.com/view/25585012/2sA3Bq4qju)
 
 ## Contributors
-- [Your Name]
-- [Your Email]
 
 ---
 
 ## The visuals
 Email sent to customer with details of invoice that require payment
-![](/Users/apple/Desktop/Screen Shot 2024-04-23 at 7.11.03 AM.png)
 
 Wrong mock payment details inserted
-![](/Users/apple/Desktop/Screen Shot 2024-04-23 at 6.47.08 AM.png)
 
 Error page displayed due to invalid details
-![](/Users/apple/Desktop/Screen Shot 2024-04-23 at 6.46.22 AM.png)
 
 When details are valid, a success page is displayed with information
-![](/Users/apple/Desktop/Screen Shot 2024-04-23 at 6.47.40 AM.png)
 
 Email sent to Customer when mock payment is successful
-![](/Users/apple/Desktop/Screen Shot 2024-04-23 at 6.49.05 AM.png)
