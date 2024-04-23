@@ -3,6 +3,7 @@ package com.bitscoderdotcom.link_generator_system.dto;
 import com.bitscoderdotcom.link_generator_system.constant.Status;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Setter
@@ -17,8 +18,8 @@ public class InvoiceDto {
     private long quantity;
     private double unitPrice;
     private double totalAmount;
-    private Date invoiceGenerationDate;
-    private Date paymentDueDate;
+    private LocalDate invoiceGenerationDate;
+    private LocalDate paymentDueDate;
     private Status status;
 
     @Data
@@ -32,8 +33,8 @@ public class InvoiceDto {
         private long quantity;
         private double unitPrice;
         private double totalAmount;
-        private Date invoiceGenerationDate;
-        private Date paymentDueDate;
+        private LocalDate invoiceGenerationDate;
+        private LocalDate paymentDueDate;
         private Status status;
     }
 }

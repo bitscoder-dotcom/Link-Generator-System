@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1>Error</h1>
+    <p id="errorMessage"></p>
+    <a href="/">Go Back</a>
+</div>
+<script>
+    // Get the error message from the URL query string
+    var urlParams = new URLSearchParams(window.location.search);
+    var errorMessage = urlParams.get('error');
+
+    // Display the error message
+    document.getElementById('errorMessage').textContent = errorMessage;
+</script>
+</body>
+</html>

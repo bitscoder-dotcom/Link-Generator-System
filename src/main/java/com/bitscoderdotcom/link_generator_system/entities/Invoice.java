@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,8 +28,8 @@ public class Invoice {
     private long quantity;
     private double unitPrice;
     private double totalAmount;
-    private Date invoiceGenerationDate;
-    private Date paymentDueDate;
+    private LocalDate invoiceGenerationDate;
+    private LocalDate paymentDueDate;
     @Enumerated(EnumType.STRING)
     private Status status;
     @OneToOne(mappedBy = "invoice", cascade = CascadeType.ALL)

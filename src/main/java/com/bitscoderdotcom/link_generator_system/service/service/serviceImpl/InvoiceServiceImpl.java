@@ -15,6 +15,7 @@ import com.bitscoderdotcom.link_generator_system.service.EmailService;
 import com.bitscoderdotcom.link_generator_system.service.service.InvoiceService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,17 +46,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .orElseThrow(() -> new ResourceNotFoundException("Company", "User email", principal.getName()));
 
         // Create a new invoice
-        Invoice invoice = new Invoice();
-        invoice.setCompany(company);
-        invoice.setCustomerName(invoiceDto.getCustomerName());
-        invoice.setCustomerEmail(invoiceDto.getCustomerEmail());
-        invoice.setDescription(invoiceDto.getDescription());
-        invoice.setQuantity(invoiceDto.getQuantity());
-        invoice.setUnitPrice(invoiceDto.getUnitPrice());
-        invoice.setTotalAmount(invoiceDto.getTotalAmount());
-        invoice.setInvoiceGenerationDate(invoiceDto.getInvoiceGenerationDate());
-        invoice.setPaymentDueDate(invoiceDto.getPaymentDueDate());
-        invoice.setStatus(Status.Unpaid);
+        Invoice invoice = createInvoice(invoiceDto, company);
 
         invoiceRepository.save(invoice);
 
@@ -66,11 +57,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         paymentLink.setUrl(baseUrl + generateUniqueUrl(invoice.getId()));
         paymentLinkRepository.save(paymentLink);
 
+        String messageBody = createMessageBody(invoice, paymentLink);
+
         // Send the payment link to the customer via email
         EmailDetails emailDetails = new EmailDetails();
         emailDetails.setRecipient(invoice.getCustomerEmail());
         emailDetails.setSubject("Invoice Payment Link");
-        emailDetails.setMessageBody("Please click the following link to view and pay your invoice: <a href=\"" + paymentLink.getUrl() + "\">" + paymentLink.getUrl() + "</a>");
+        emailDetails.setMessageBody(messageBody);
         emailService.sendEmail(emailDetails);
 
         log.info("Invoice generated successfully for company with id: {}", company.getId());
@@ -95,7 +88,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Transactional
-    public String processPayment(String linkId, String invoiceId) {
+    public ResponseEntity<String> processPayment(String linkId, String invoiceId) {
         // Find the payment link by linkId
         PaymentLink paymentLink = paymentLinkRepository.findById(linkId)
                 .orElseThrow(() -> new ResourceNotFoundException("PaymentLink", "id", linkId));
@@ -108,7 +101,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
         // Check if the invoice has already been paid
         if (invoice.getStatus() == Status.Paid) {
-            return "This invoice has already been paid for.";
+            return new ResponseEntity<>("This invoice has already been paid for.", HttpStatus.BAD_REQUEST);
         }
 
         // If the invoice has not been paid, process the payment
@@ -120,11 +113,48 @@ public class InvoiceServiceImpl implements InvoiceService {
         // Send a success email to the customer with the receipt
         EmailDetails emailDetails = new EmailDetails();
         emailDetails.setRecipient(invoice.getCustomerEmail());
-        emailDetails.setSubject("Payment Successful, please check your email for details. Thank you and please come again.");
+        emailDetails.setSubject("Payment Successful");
         emailDetails.setMessageBody(receipt);
         emailService.sendEmail(emailDetails);
 
-        return "Payment for invoice " + invoice.getId() + " was successful.";
+        return new ResponseEntity<>("Payment for invoice " + invoice.getId() + " was successful.", HttpStatus.OK);
+    }
+
+    private Invoice createInvoice(InvoiceDto invoiceDto, Company company) {
+        Invoice invoice = new Invoice();
+        invoice.setCompany(company);
+        invoice.setCustomerName(invoiceDto.getCustomerName());
+        invoice.setCustomerEmail(invoiceDto.getCustomerEmail());
+        invoice.setDescription(invoiceDto.getDescription());
+        invoice.setQuantity(invoiceDto.getQuantity());
+        invoice.setUnitPrice(invoiceDto.getUnitPrice());
+        invoice.setTotalAmount(invoiceDto.getTotalAmount());
+        invoice.setInvoiceGenerationDate(LocalDate.now());
+        invoice.setPaymentDueDate(LocalDate.now().plusDays(1));
+        invoice.setStatus(Status.Unpaid);
+
+        return invoiceRepository.save(invoice);
+    }
+
+    private String createMessageBody(Invoice invoice, PaymentLink paymentLink) {
+        String messageBody = "<html><body>";
+        messageBody += "<p>Dear " + invoice.getCustomerName() + ",</p>";
+        messageBody += "<p>An invoice has been generated for you. Here are the details:</p>";
+        messageBody += "<hr />";
+        messageBody += "<p>Description: " + invoice.getDescription() + "</p>";
+        messageBody += "<p>Quantity: " + invoice.getQuantity() + "</p>";
+        messageBody += "<p>Unit Price: $" + invoice.getUnitPrice() + "</p>";
+        messageBody += "<hr />";
+        messageBody += "<p>Total Amount: $" + invoice.getTotalAmount() + "</p>";
+        messageBody += "<hr />";
+        messageBody += "<p>Invoice Date: " + invoice.getInvoiceGenerationDate() + "</p>";
+        messageBody += "<p>Payment Due Date: " + invoice.getPaymentDueDate() + "</p>";
+        messageBody += "<hr />";
+        messageBody += "<p>Please click the following link to view and pay your invoice: <a href=\"" +
+                paymentLink.getUrl() + "\">" + paymentLink.getUrl() + "</a></p>";
+        messageBody += "<p>Thank you.</p>";
+        messageBody += "</body></html>";
+        return messageBody;
     }
 
     private String generateUniqueUrl(String invoiceId) {
