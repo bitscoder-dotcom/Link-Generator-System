@@ -5,6 +5,7 @@ import com.bitscoderdotcom.link_generator_system.dto.InvoiceDto;
 import com.bitscoderdotcom.link_generator_system.entities.Invoice;
 import com.bitscoderdotcom.link_generator_system.service.service.InvoiceService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +20,27 @@ public class InvoiceController {
 
     private InvoiceService invoiceService;
 
+    @GetMapping("/generateInvoice")
+    public String showInvoiceForm(Model model) {
+        model.addAttribute("invoiceDto", new InvoiceDto());
+        return "generateInvoice";
+    }
+
     @PostMapping("/generateInvoice")
-    public ResponseEntity<ApiResponse<InvoiceDto.Response>> generateInvoice(@RequestBody InvoiceDto invoiceDto, Principal principal) {
-        return invoiceService.generateInvoice(invoiceDto, principal);
+    public String generateInvoice(@ModelAttribute InvoiceDto invoiceDto, Principal principal, Model model) {
+        ResponseEntity<ApiResponse<InvoiceDto.Response>> apiResponse = invoiceService.generateInvoice(invoiceDto, principal);
+
+        // Check if the invoice was generated successfully
+        if (apiResponse != null && apiResponse.getStatusCode() == HttpStatus.OK) {
+            // Add a success message
+            model.addAttribute("message", "Invoice generated successfully. An email has been sent to the customer.");
+        } else {
+            // Add an error message
+            model.addAttribute("error", "There was an error generating the invoice.");
+        }
+
+        // Stay on the same page
+        return "generateInvoice";
     }
 
     @GetMapping("/{invoiceId}/payment")

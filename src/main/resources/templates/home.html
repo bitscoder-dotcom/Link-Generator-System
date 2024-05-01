@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice Generation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6em;
+        }
+        #container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        #header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        #header h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 36px;
+        }
+        #nav {
+            background: #50b3a2;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-bottom: 15px;
+        }
+        #nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0 10px;
+            font-size: 20px;
+        }
+        #nav a:hover {
+            background: #e8491d;
+            transition: background 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+<header id="header">
+    <div id="container">
+        <h1>Invoice Generation System</h1>
+    </div>
+</header>
+<nav id="nav">
+    <div id="container">
+        <a href="/lgsApp/v1/auth/signIn">Sign In</a>
+        <a href="/lgsApp/v1/auth/register">Register</a>
+    </div>
+</nav>
+<!--<script>-->
+<!--    const navLinks = document.querySelectorAll("#nav a");-->
+<!--    navLinks.forEach(link => {-->
+<!--        link.addEventListener("click", function(e) {-->
+<!--            e.preventDefault();-->
+<!--            const href = this.getAttribute("href");-->
+<!--            const offsetTop = document.querySelector(href).offsetTop;-->
+<!--            scroll({-->
+<!--                top: offsetTop,-->
+<!--                behavior: "smooth"-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+</body>
+</html>

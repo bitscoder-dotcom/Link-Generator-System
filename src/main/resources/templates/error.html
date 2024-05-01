@@ -28,11 +28,9 @@
     <a href="/">Go Back</a>
 </div>
 <script>
-    // Get the error message from the URL query string
     var urlParams = new URLSearchParams(window.location.search);
     var errorMessage = urlParams.get('error');
 
-    // Display the error message
     document.getElementById('errorMessage').textContent = errorMessage;
 </script>
 </body>

@@ -38,9 +38,9 @@ public class AuthService {
     private EmailService emailService;
 
     @Transactional
-    public ResponseEntity<ApiResponse<UserRegistrationRequest.Response>> register(UserRegistrationRequest request) {
+    public String register(UserRegistrationRequest request) {
 
-        log.info("Register method called with request: {}", request);
+        log.info("Register method called");
 
         String username = request.getName();
         String email = request.getEmail();
@@ -50,16 +50,12 @@ public class AuthService {
 
         if (usernameExists) {
             log.info("Username already taken: {}", username);
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Username is already taken!"
-            );
+            return "Username is already taken!";
         }
 
         if (emailExists) {
             log.info("Email already in use: {}", email);
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Email Address already in use!"
-            );
+            return "Email Address already in use!";
         }
 
         Company company = new Company();
@@ -77,15 +73,7 @@ public class AuthService {
         emailDetails.setMessageBody("Your account has been registered on our platform");
         emailService.sendEmail(emailDetails);
 
-        UserRegistrationRequest.Response response = new UserRegistrationRequest.Response(
-                LocalDateTime.now(),
-                UUID.randomUUID().toString(),
-                true,
-                "Company registered successfully",
-                request.getName()
-        );
-
-        return createSuccessResponse("Company registered successfully", response);
+        return "Company registered successfully";
     }
 
     public ResponseEntity<ApiResponse<SignInRequest.Response>> signIn(SignInRequest request) {

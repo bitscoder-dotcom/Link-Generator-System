@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 import java.security.Principal;
 
 public interface InvoiceService {
-
     ResponseEntity<ApiResponse<InvoiceDto.Response>> generateInvoice(InvoiceDto invoiceDto, Principal principal);
     ResponseEntity<String> processPayment(String linkId, String invoiceId);
     Invoice getInvoiceById(String id);
+
 }

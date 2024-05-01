@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 });
 
         log.info("Found COMPANY user: {}", email);
-        return buildUserDetails(company);
+        return UserDetailsImpl.build(company);
     }
 
     private UserDetails buildUserDetails(Company company) {

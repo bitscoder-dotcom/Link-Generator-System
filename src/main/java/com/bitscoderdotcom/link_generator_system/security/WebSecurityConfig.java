@@ -5,6 +5,7 @@ import com.bitscoderdotcom.link_generator_system.security.service.UserDetailsSer
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -80,13 +81,12 @@ public class WebSecurityConfig {
         http.csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/lgsApp/v1/auth/**").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/lgsApp/v1/invoice/{invoiceId}/payment", "/payment", "/paymentSuccess", "/error" ).permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(HttpMethod.POST,"/lgsApp/v1/invoice/generateInvoice").authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .formLogin();
 

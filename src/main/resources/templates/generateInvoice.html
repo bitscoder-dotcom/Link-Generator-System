@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invoice Generation Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6em;
+        }
+        #container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        #header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        #header h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 36px;
+        }
+        form {
+            margin: 20px auto;
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 2px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="email"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+        input[type="submit"] {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #50b3a2;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<header id="header">
+    <div id="container">
+        <h1>Invoice Generation Form</h1>
+    </div>
+</header>
+<form th:action="@{/lgsApp/v1/invoice/generateInvoice}" th:object="${invoiceDto}" method="post">
+    <label for="customerName">Customer Name:</label>
+    <input type="text" id="customerName" th:field="*{customerName}" required>
+    <label for="customerEmail">Customer Email:</label>
+    <input type="email" id="customerEmail" th:field="*{customerEmail}" required>
+    <label for="description">Description:</label>
+    <input type="text" id="description" th:field="*{description}" required>
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" th:field="*{quantity}" required>
+    <label for="unitPrice">Unit Price:</label>
+    <input type="number" id="unitPrice" th:field="*{unitPrice}" required>
+    <label for="totalAmount">Total Amount:</label>
+    <input type="number" id="totalAmount" th:field="*{totalAmount}" required>
+    <input type="submit" value="Generate Invoice">
+</form>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modalText"></p>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var message = /*[[${message}]]*/ 'default';
+    var error = /*[[${error}]]*/ 'default';
+
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+    var text = document.getElementById("modalText");
+
+    if (message !== 'default') {
+        text.innerHTML = message;
+        modal.style.display = "block";
+    } else if (error !== 'default') {
+        text.innerHTML = error;
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    /*]]>*/
+</script>
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0);
+        background-color: rgba(0,0,0,0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+</body>
+</html>

@@ -152,6 +152,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         messageBody += "<hr />";
         messageBody += "<p>Please click the following link to view and pay your invoice: <a href=\"" +
                 paymentLink.getUrl() + "\">" + paymentLink.getUrl() + "</a></p>";
+        messageBody += "<p>LinkId for payment verification: " + paymentLink.getId() + "</p>";
+        messageBody += "<p><strong>Please note:</strong> The LinkId and the InvoiceId are necessary for validating the payment when requested.</p>";
         messageBody += "<p>Thank you.</p>";
         messageBody += "</body></html>";
         return messageBody;

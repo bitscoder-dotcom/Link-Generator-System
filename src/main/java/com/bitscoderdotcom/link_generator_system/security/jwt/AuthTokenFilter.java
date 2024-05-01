@@ -3,6 +3,7 @@ package com.bitscoderdotcom.link_generator_system.security.jwt;
 import com.bitscoderdotcom.link_generator_system.security.service.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -46,11 +47,23 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
+//    private String parseJwt(HttpServletRequest request) {
+//        String headerAuth = request.getHeader("Authorization");
+//
+//        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+//            return headerAuth.substring(7);
+//        }
+//        return null;
+//    }
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+    private String parseJwt(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    return cookie.getValue();
+                }
+            }
         }
         return null;
     }

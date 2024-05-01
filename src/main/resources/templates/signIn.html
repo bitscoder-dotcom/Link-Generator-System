@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign In Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6em;
+        }
+        #container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        #header {
+            background: #50b3a2;
+            color: white;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        #header h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            font-size: 36px;
+        }
+        form {
+            margin: 20px auto;
+            width: 300px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #fff;
+            border-radius: 2px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+        input[type="submit"] {
+            padding: 10px 15px;
+            color: #fff;
+            background-color: #50b3a2;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div id="container">
+            <h1>Sign In Form</h1>
+        </div>
+    </header>
+    <form th:action="@{/lgsApp/v1/auth/signIn}" th:object="${signInRequest}" method="post">
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" th:field="*{password}" required>
+        <input type="submit" value="Sign In">
+    </form>
+</body>
+</html>
