@@ -23,12 +23,16 @@ public class EmailService {
     public void sendEmail (EmailDetails emailDetails) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "utf-8");
 
             helper.setFrom(emailSender);
             helper.setTo(emailDetails.getRecipient());
             helper.setSubject(emailDetails.getSubject());
             helper.setText(emailDetails.getMessageBody(), true);
+
+            if (emailDetails.getAttachment() != null) {
+                helper.addAttachment("QRCode.png", emailDetails.getAttachment());
+            }
 
             mailSender.send(mimeMessage);
             log.info("Message sent to: {}", emailDetails.getRecipient());

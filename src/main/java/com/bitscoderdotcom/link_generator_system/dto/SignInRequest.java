@@ -15,6 +15,8 @@ public class SignInRequest {
     private String email;
     @NotBlank(message = "password should not be blank")
     private String password;
+    @NotBlank(message = "authCode should not be blank")
+    private String authCode;
 
     @AllArgsConstructor
     @Getter

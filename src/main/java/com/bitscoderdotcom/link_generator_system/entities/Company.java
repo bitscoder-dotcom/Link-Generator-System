@@ -23,6 +23,9 @@ public class Company {
     private String companyName;
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private List<Invoice> invoices;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "totp_id", referencedColumnName = "username")
+    private UserTOTP userTOTP;
 
     public Company() {
         this.setId(generateCustomUUID());

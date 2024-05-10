@@ -3,6 +3,8 @@ package com.bitscoderdotcom.link_generator_system.controller;
 import com.bitscoderdotcom.link_generator_system.dto.ApiResponse;
 import com.bitscoderdotcom.link_generator_system.dto.SignInRequest;
 import com.bitscoderdotcom.link_generator_system.dto.UserRegistrationRequest;
+import com.bitscoderdotcom.link_generator_system.dto.ValidateCodeDto;
+import com.bitscoderdotcom.link_generator_system.entities.Validation;
 import com.bitscoderdotcom.link_generator_system.security.service.AuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -57,8 +59,26 @@ public class AuthController {
             cookie.setHttpOnly(true);
             // Add the cookie to the response
             response.addCookie(cookie);
-            // Redirect to the generateInvoice page
-            return "redirect:/lgsApp/v1/invoice/generateInvoice";
+            // Redirect to the 2FA page
+            return "redirect:/lgsApp/v1/auth/2fa";
+        } else {
+            redirectAttributes.addFlashAttribute("error", Objects.requireNonNull(apiResponse.getBody()).getMessage());
+            return "redirect:/error";
+        }
+    }
+
+    @GetMapping("/2fa")
+    public String show2FAForm(Model model) {
+        model.addAttribute("validateCodeDto", new ValidateCodeDto());
+        return "2fa";
+    }
+
+    @PostMapping("/validate2FA")
+    public String validate2FA(@ModelAttribute ValidateCodeDto body, RedirectAttributes redirectAttributes) {
+        ResponseEntity<ApiResponse<SignInRequest.Response>> apiResponse = authService.validate2FA(body);
+        if (apiResponse.getStatusCode() == HttpStatus.OK) {
+            // Redirect to the Userpage
+            return "redirect:/lgsApp/v1/userPage";
         } else {
             redirectAttributes.addFlashAttribute("error", Objects.requireNonNull(apiResponse.getBody()).getMessage());
             return "redirect:/error";
